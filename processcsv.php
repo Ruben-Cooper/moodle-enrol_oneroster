@@ -1,4 +1,5 @@
 <?php
+namespace enrol_oneroster;
 require_once('../../config.php');
 
 // Define the URL where this script is located
