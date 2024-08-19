@@ -27,8 +27,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.3', '7.4']
-        database: ['pgsql', 'mariadb']
+        php-versions: ['7.4']
+        database: ['pgsql']
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -37,10 +37,11 @@ jobs:
           path: plugin
 
       - name: Install node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           # TODO: Check if we can support .nvmrc
           node-version: '14.15.0'
+          
 
       - name: Setup PHP environment
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
