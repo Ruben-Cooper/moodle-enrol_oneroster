@@ -34,7 +34,7 @@ jobs:
           path: plugin
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2  # Try using v2 instead of v1
+        uses: actions/setup-node@v4  # Try using v2 instead of v1
         with:
           node-version: '14.x'  # Specify a broader version range to avoid potential issues with specific minor versions
 
