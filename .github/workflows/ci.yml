@@ -36,7 +36,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '14.x'  # Specify a broader version range to avoid potential issues with specific minor versions
+          node-version: '14.x'
 
       - name: Setup PHP environment
         uses: shivammathur/setup-php@v2
@@ -45,6 +45,9 @@ jobs:
           extensions: mbstring, pgsql, mysqli
           tools: phpunit
 
+      - name: Ensure PHP is in PATH
+        run: echo "PHP PATH: $(which php)"
+        
       - name: Deploy moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
