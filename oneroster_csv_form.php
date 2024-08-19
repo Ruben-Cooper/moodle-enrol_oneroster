@@ -6,8 +6,8 @@ class oneroster_csv_form extends moodleform {
         $mform = $this->_form;
 
         // file picker for CSV file upload
-        $mform->addElement('filepicker', 'csvfile', 'Upload Zip File', null, array('accepted_types' => '.zip'));
-        $mform->addRule('csvfile', null, 'required', null, 'client');
+        $mform->addElement('filepicker', 'uploadedzip', 'Upload Zip File', null, array('accepted_types' => '.zip'));
+        $mform->addRule('uploadedzip', null, 'required', null, 'client');
 
         // buttons
         $this->add_action_buttons(true, 'Upload');

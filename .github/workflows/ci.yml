@@ -36,11 +36,12 @@ jobs:
           # Clone in plugin subdir, so we can setup CI in default directory.
           path: plugin
 
-      - name: Install node
-        uses: actions/setup-node@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
           # TODO: Check if we can support .nvmrc
-          node-version: '14.15.0'
+          node-version: '14.x'
+          cache: 'npm'
 
       - name: Setup PHP environment
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
@@ -63,7 +64,7 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           # TODO: Omitted MOODLE_BRANCH results in regex failure, investigate.
-          MOODLE_BRANCH: 'master'
+          MOODLE_BRANCH: 'MOODLE_310_STABLE'
 
       - name: Run phplint
         if: ${{ always() }}
