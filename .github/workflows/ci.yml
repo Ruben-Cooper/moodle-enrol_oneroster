@@ -49,23 +49,18 @@ jobs:
         run: |
           php -v
           which php
-          echo $PATH
-        shell: bash
 
-      - name: Ensure PHP is in PATH
-        run: |
-          export PATH="/usr/local/bin/php:$PATH"
-          php -v
-          which php
-
-      - name: Deploy moodle-plugin-ci
+      - name: Deploy Moodle Plugin CI
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
           echo "$(cd ci/bin; pwd)" >> $GITHUB_PATH
           echo "$(cd ci/vendor/bin; pwd)" >> $GITHUB_PATH
           sudo locale-gen en_AU.UTF-8
+        env:
+          COMPOSER_PROCESS_TIMEOUT: 2000
+          PATH: /usr/local/bin/php:$PATH
 
-      - name: Install moodle-plugin-ci
+      - name: Install Moodle Plugin CI
         run: |
           export NODE_VERSION=$(node -v)
           export NPM_VERSION=$(npm -v)
@@ -74,7 +69,7 @@ jobs:
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: 'MOODLE_310_STABLE'
-          PATH: $PATH:/home/runner/.nvm/versions/node/$(node -v)/bin
+          PATH: $PATH:/home/runner/.nvm/versions/node/$(node -v)/bin:/usr/local/bin:/usr/local/php/bin:/usr/bin/php:/opt/php/php/bin
 
       - name: Run phplint
         if: ${{ always() }}
