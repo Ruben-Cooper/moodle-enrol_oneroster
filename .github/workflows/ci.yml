@@ -12,7 +12,6 @@ jobs:
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
-        # Health check to wait for postgres to start.
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
@@ -33,17 +32,16 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v2
         with:
-          # Clone in plugin subdir, so we can setup CI in default directory.
           path: plugin
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          # TODO: Check if we can support .nvmrc
           node-version: '14.x'
+          cache: 'npm'
 
       - name: Setup PHP environment
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, pgsql, mysqli
@@ -52,17 +50,16 @@ jobs:
       - name: Deploy moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
-          # Add dirs to $PATH
           echo $(cd ci/bin; pwd) >> $GITHUB_PATH
           echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
-          # PHPUnit depends on en_AU.UTF-8 locale
           sudo locale-gen en_AU.UTF-8
+
       - name: Install moodle-plugin-ci
-        # Need explicit IP to stop mysql client fail on attempt to use unix socket.
-        run: moodle-plugin-ci install -vvv --plugin ./plugin --db-host=127.0.0.1
+        run: |
+          # Use the Node.js version installed by setup-node, skip NVM installation
+          moodle-plugin-ci install -vvv --plugin ./plugin --db-host=127.0.0.1
         env:
           DB: ${{ matrix.database }}
-          # TODO: Omitted MOODLE_BRANCH results in regex failure, investigate.
           MOODLE_BRANCH: 'MOODLE_310_STABLE'
 
       - name: Run phplint
@@ -91,7 +88,7 @@ jobs:
 
       - name: Run mustache
         if: ${{ always() }}
-        run: moodle-plugin-ci phpcpd
+        run: moodle-plugin-ci mustache
 
       - name: Run grunt
         if: ${{ always() }}
