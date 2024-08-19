@@ -41,7 +41,6 @@ jobs:
         with:
           # TODO: Check if we can support .nvmrc
           node-version: '14.x'
-          cache: 'npm'
 
       - name: Setup PHP environment
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
