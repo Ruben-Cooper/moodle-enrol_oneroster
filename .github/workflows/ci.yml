@@ -45,10 +45,19 @@ jobs:
           extensions: mbstring, pgsql, mysqli
           tools: phpunit
 
+      - name: Verify PHP installation
+        run: |
+          php -v
+          which php
+          echo $PATH
+        shell: bash
+
       - name: Ensure PHP is in PATH
-        run: | 
-           echo "PHP PATH: $(which php)"
-        
+        run: |
+          export PATH="/usr/local/bin/php:$PATH"
+          php -v
+          which php
+
       - name: Deploy moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
